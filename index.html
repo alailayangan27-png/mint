@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<title>Mint</title>
 
+<style>
+body {
+  font-family: -apple-system;
+  background:#f5f5f7;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  width:320px;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:10px;
+  border:none;
+}
+
+.main {
+  background:black;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h3>Mint Token</h3>
+<p>$1 = 1000 TOKEN</p>
+
+<input id="wallet" placeholder="Wallet">
+
+<button onclick="mint(1)">$1</button>
+<button onclick="mint(5)">$5</button>
+<button onclick="mint(10)">$10</button>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+async function mint(amount){
+  const wallet = document.getElementById("wallet").value;
+
+  const res = await fetch("/api/mint", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ wallet, amount })
+  });
+
+  const data = await res.json();
+  document.getElementById("status").innerText = data.message;
+}
+</script>
+
+</body>
+</html>
