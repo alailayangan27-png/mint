@@ -17,17 +17,24 @@ async function mint() {
 
   status.innerText = "Processing...";
 
-  const res = await fetch("/api/mint", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ wallet, amount })
-  });
+  try {
+    const res = await fetch("/api/mint", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ wallet, amount })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (data.success) {
-    status.innerText = "Mint recorded!";
-  } else {
-    status.innerText = "Error";
+    if (data.success) {
+      status.innerText = "Mint success ✅";
+    } else {
+      status.innerText = "Error";
+    }
+
+  } catch (err) {
+    status.innerText = "Server error";
   }
 }
