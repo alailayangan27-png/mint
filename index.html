@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mint</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
+<title>Mint</title>
 </head>
+
 <body>
 
 <div class="app">
-
   <h1>Mint Token</h1>
 
   <input id="wallet" placeholder="Wallet address">
@@ -22,15 +21,12 @@
     <button onclick="setAmount(100)">$100</button>
   </div>
 
-  <div class="info">
-    <p>Mint: <span id="usd">$1</span></p>
-    <p>Receive: <span id="token">1000</span> TOKEN</p>
-  </div>
+  <p>Mint: <span id="usd">$1</span></p>
+  <p>Receive: <span id="token">1000</span> TOKEN</p>
 
-  <button class="mint" onclick="mint()">Mint Now</button>
+  <button onclick="mint()">Mint Now</button>
 
   <p id="status"></p>
-
 </div>
 
 <script src="app.js"></script>
