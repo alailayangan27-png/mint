@@ -1,38 +1,33 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
-
 export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   const { wallet, amount } = req.body;
 
-  if (!wallet) {
-    return res.json({ message: "Enter wallet" });
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/mints`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify({
+        wallet,
+        amount: amount * 1000,
+        usd: amount
+      })
+    });
+
+    if (!response.ok) throw new Error();
+
+    return res.json({ success: true });
+
+  } catch (err) {
+    return res.status(500).json({ success: false });
   }
-
-  // ambil total mint
-  const { data } = await supabase
-    .from('mint')
-    .select('amount');
-
-  let total = 0;
-  data.forEach(d => total += d.amount);
-
-  if (total + amount > 10000) {
-    return res.json({ message: "Mint full" });
-  }
-
-  // simpan
-  await supabase.from('mint').insert({
-    wallet,
-    amount,
-    status: "pending"
-  });
-
-  res.json({
-    message: `Send $${amount} USDC to project wallet`
-  });
 }
